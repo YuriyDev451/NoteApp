@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Note</string>
+    <string name="button_add_note">Button add note</string>
+    <string name="hint">Добавьте заметку</string>
+    <string name="Save">Сохранить</string>
+    <string name="low">Низкий</string>
+    <string name="medium">Средний</string>
+    <string name="high">Высокий</string>
+</resources>
