@@ -1,14 +1,14 @@
 package com.example.note
 
-import android.content.Context
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.note.databinding.ActivityNoteAddBinding
 
 class NoteAddActivity : AppCompatActivity() {
 
-lateinit var binding: ActivityNoteAddBinding
+    lateinit var binding: ActivityNoteAddBinding
+
+    private val database = Database.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -16,28 +16,34 @@ lateinit var binding: ActivityNoteAddBinding
         setContentView(binding.root)
 
 
-        saveNote()
-
-
-    }
-
-    private fun saveNote () {
-        val string = binding.editTextNote.text.trim()
-        val position = getPosition()
-    }
-
-    private fun getPosition(): Int {
-        val position: Int
-        if (binding.radioButtonLow.isChecked) {
-            position = 0
-        } else if (binding.radioButtonMedium.isChecked){
-            position = 1
-        }else {
-            position = 2
+        binding.buttonSave.setOnClickListener{
+            saveNote()
         }
-        return position
+
     }
 
+    private fun saveNote() {
+        val text = binding.editTextNote.text.toString().trim()
+        val priorty = getPriorty()
+        val id = database.getNotes().size
+        val note = Note(id, text, priorty)
+        database.add(note)
+        finish()
+
+
+    }
+
+    private fun getPriorty(): Int {
+        val priorty: Int
+        if (binding.radioButtonLow.isChecked) {
+            priorty = 0
+        } else if (binding.radioButtonMedium.isChecked) {
+            priorty = 1
+        } else {
+            priorty = 2
+        }
+        return priorty
+    }
 
 
 }

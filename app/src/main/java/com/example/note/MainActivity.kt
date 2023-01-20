@@ -14,33 +14,33 @@ class MainActivity : AppCompatActivity() {
 
 
     lateinit var binding: ActivityMainBinding
-    private var notes = ArrayList<Note>()
+    private val database = Database.instance
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val random = Random
-        for (i in 1..20) {
-            val note = Note(i, "note" + i, random.nextInt(0, 3))
-            notes.add(note)
-        }
 
-        showNote()
 
-        binding.floatingActionButton.setOnClickListener(View.OnClickListener() {
+        binding.floatingActionButton.setOnClickListener {
             val intent = Intent(this, NoteAddActivity::class.java)
             startActivity(intent)
+        }
 
-        })
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        showNote()
+    }
 
     private fun showNote() {
 
-        notes.forEach() {
+        binding.linerLayout.removeAllViews()
+        database.getNotes().forEach() {
             val view = layoutInflater.inflate(R.layout.note, binding.linerLayout, false)
             val textViewNote: TextView = view.findViewById(R.id.textViewNote)
             textViewNote.text = it.getText()
