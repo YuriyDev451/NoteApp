@@ -7,6 +7,7 @@ import android.provider.ContactsContract
 import android.view.View
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.note.databinding.ActivityMainBinding
 import kotlin.random.Random
 
@@ -15,7 +16,7 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityMainBinding
     private val database = Database.instance
-
+    private var notesAdapter = NotesAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,10 +24,17 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        val manager = LinearLayoutManager(this)
+        notesAdapter = NotesAdapter()
+
+        binding.recyclerViewNotes.layoutManager = manager
+        binding.recyclerViewNotes.adapter = notesAdapter
+
 
         binding.floatingActionButton.setOnClickListener {
             val intent = Intent(this, NoteAddActivity::class.java)
             startActivity(intent)
+
         }
 
 
@@ -39,25 +47,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showNote() {
 
-        binding.linerLayout.removeAllViews()
-        database.getNotes().forEach() {
-            val view = layoutInflater.inflate(R.layout.note, binding.linerLayout, false)
-            val textViewNote: TextView = view.findViewById(R.id.textViewNote)
-            textViewNote.text = it.getText()
-            val resColorId: Int
-            when (it.getPriorty()) {
-                0 -> resColorId = android.R.color.holo_green_light
-                1 -> resColorId = android.R.color.holo_orange_light
-                else -> resColorId = android.R.color.holo_red_light
-            }
-
-            val color = ContextCompat.getColor(this, resColorId)
-            textViewNote.setBackgroundColor(color)
-            binding.linerLayout.addView(view)
-
-        }
-
-
+        notesAdapter.notes = database.getNotes()
     }
 }
 
