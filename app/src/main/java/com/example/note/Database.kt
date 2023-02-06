@@ -13,7 +13,7 @@ class Database {
     }
 
 
-    constructor(){
+    init{
         val random = Random
         for (i in 0..19) {
             val note = Note(i, "note" + i, random.nextInt(0, 3))
